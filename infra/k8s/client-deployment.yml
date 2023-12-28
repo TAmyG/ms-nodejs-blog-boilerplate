@@ -1,0 +1,32 @@
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector: # Here we are telling to Deployment which object with this label should take care
+    matchLabels:
+      app: client
+  template:
+    metadata: # We are defining here the label 'app' with value 'client' inside each replica
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: tamyvivas/ms-client
+          imagePullPolicy: Always # 'Never' will use the image built locally from your image cache instead of attempting to pull
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  type: ClusterIP # NodePort just for Dev purposes
+  selector:
+    app: client
+  ports: 
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
