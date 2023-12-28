@@ -1,0 +1,32 @@
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1
+  selector: # Here we are telling to Deployment which object with this label should take care
+    matchLabels:
+      app: query
+  template:
+    metadata: # We are defining here the label 'app' with value 'query' inside each replica
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: tamyvivas/ms-query
+          imagePullPolicy: Always # 'Never' will use the image built locally from your image cache instead of attempting to pull
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  type: ClusterIP # NodePort just for Dev purposes
+  selector:
+    app: query
+  ports: 
+    - name: query
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

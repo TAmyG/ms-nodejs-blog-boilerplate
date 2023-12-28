@@ -1,0 +1,32 @@
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1
+  selector: # Here we are telling to Deployment which object with this label should take care
+    matchLabels:
+      app: comments
+  template:
+    metadata: # We are defining here the label 'app' with value 'comments' inside each replica
+      labels:
+        app: comments
+    spec:
+      containers:
+        - name: comments
+          image: tamyvivas/ms-comments
+          imagePullPolicy: Always # 'Never' will use the image built locally from your image cache instead of attempting to pull
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  type: ClusterIP # NodePort just for Dev purposes
+  selector:
+    app: comments
+  ports: 
+    - name: comments
+      protocol: TCP
+      port: 4001
+      targetPort: 4001

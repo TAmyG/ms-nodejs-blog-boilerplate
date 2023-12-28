@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv  
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: posts.com # Should modify /etc/hosts and add this domain if k8s is locally
+      http:
+        paths:
+          - path: /posts
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: posts-srv
+                port: 
+                  number: 4000

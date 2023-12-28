@@ -1,0 +1,32 @@
+apiVersion:  apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  selector: # Here we are telling to Deployment which object with this label should take care
+    matchLabels:
+      app: posts
+  template:
+    metadata: # We are defining here the label 'app' with value 'posts' inside each replica
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: tamyvivas/ms-posts
+          imagePullPolicy: Always # 'Never' will use the image built locally from your image cache instead of attempting to pull
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-srv
+spec:
+  type: ClusterIP # NodePort just for Dev purposes
+  selector:
+    app: posts
+  ports: 
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
