@@ -15,7 +15,7 @@ spec:
       containers:
         - name: posts
           image: tamyvivas/ms-posts
-          imagePullPolicy: Always # 'Never' will use the image built locally from your image cache instead of attempting to pull
+          imagePullPolicy: Never # 'Never' will use the image built locally from your image cache instead of attempting to pull
 ---
 apiVersion: v1
 kind: Service
